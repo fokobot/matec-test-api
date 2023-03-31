@@ -38,13 +38,13 @@ module.exports = function ws() {
         })
 
         // User disconnected
-        connection.on('close', () => handleDisconnect(userId));
+        connection.on('close', () => handleDisconnect(userId, clients));
     });
 
 
 }
 
-function handleDisconnect(userId) {
+function handleDisconnect(userId, clients) {
     console.log(`${userId} disconnected.`);
     delete clients[userId];
 }

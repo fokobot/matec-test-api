@@ -24,15 +24,13 @@ module.exports = function ws() {
         console.log(`${userId} connected.`);
 
         connection.on('message', function (message) {
-                console.log('Received Message: ', message.toString());
+            console.log('Received Message: ', message.toString());
 
-                // broadcasting message to all connected clients
-                for (let userId in clients) {
-                    let client = clients[userId];
-                    if (client.readyState === WebSocket.OPEN) {
-                        client.send(message.toString());
-                    }
-                };
+            // broadcasting message to all connected clients
+            for (let userId in clients) {
+                let client = clients[userId];
+                client.send(message.toString());
+            };
         })
 
         // User disconnected

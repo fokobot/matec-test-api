@@ -22,22 +22,27 @@ module.exports = function ws() {
         // Store the new connection and handle messages
         clients[userId] = connection;
         console.log(`${userId} connected.`);
+
+        connection.on('message', function (message) {
+            if (message.type === 'utf8') {
+                console.log('Received Message: ', message.utf8Data);
+
+                // broadcasting message to all connected clients
+                for (let userId in clients) {
+                    let client = clients[userId];
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(data);
+                    }
+                };
+            }
+        })
+
+        // User disconnected
+        connection.on('close', () => handleDisconnect(userId));
     });
 
-    // User disconnected
-    // connection.on('close', () => handleDisconnect(userId));
-}
 
-// function broadcastMessage(json) {
-//     // We are sending the current data to all connected active clients
-//     const data = JSON.stringify(json);
-//     for (let userId in clients) {
-//         let client = clients[userId];
-//         if (client.readyState === WebSocket.OPEN) {
-//             client.send(data);
-//         }
-//     };
-// }
+}
 
 function handleDisconnect(userId) {
     console.log(`${userId} disconnected.`);

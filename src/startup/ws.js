@@ -24,7 +24,7 @@ module.exports = function ws() {
         console.log(`${userId} connected.`);
 
         connection.on('message', function (message) {
-            console.log(message);
+            console.log(message.toString("hex"));
             if (message.type === 'utf8') {
                 console.log('Received Message: ', message.utf8Data);
 

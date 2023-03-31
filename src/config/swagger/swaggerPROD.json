@@ -1,32 +1,151 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "Backend ::ShareYourIdea:: App",
+        "description": "Backend ::Matec Test:: App",
         "version": "1.0.0",
-        "title": "Swagger ShareYourIdea",
+        "title": "Matec Test",
         "contact": {
-            "email": "juancodigo23@gmail.com"
+            "email": "fabian.osorio.990628@gmail.com"
         },
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:3001",
+    "host": "ec2-100-25-37-66.compute-1.amazonaws.com:5000",
     "basePath": "/v1/api",
-    "tags": [{
-        "name": "User",
-        "description": "Everything about users"
-    }],
-    "schemes": ["http", "https"],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Endpoints de autenticacion"
+        },
+        {
+            "name": "Producciones",
+            "description": "Endpoints de producciones"
+        },
+        {
+            "name": "Calificaciones",
+            "description": "Endpoints de calificaciones"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
     "paths": {
-        "/user": {
-            "get": {
-                "tags": ["User"],
-                "summary": "Finds All the Users",
+        "/auth/signin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Inicio de sesión de usuario",
                 "description": "",
-                "produces": ["application/json"],
-                "parameters": [{
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Nickname de Usuario",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Contraseña de Usuario",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Estatus invalido"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Registro de usuario",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Nombre completo de Usuario",
+                        "required": true
+                    },
+                    {
+                        "name": "username",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Nickname de Usuario",
+                        "required": true
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Contraseña de Usuario",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Estatus invalido"
+                    }
+                }
+            }
+        },
+        "/production": {
+            "get": {
+                "tags": [
+                    "Producciones"
+                ],
+                "summary": "Obtener todas las producciones",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "query",
+                        "type": "object",
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "type": "string",
+                        "in": "query",
+                        "required": false
+                    },
+                    {
                         "name": "limit",
                         "type": "number",
                         "in": "query",
@@ -41,115 +160,136 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successfull operation",
+                        "description": "Operación exitosa",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/Production"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid status value"
+                        "description": "Estatus invalido"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Producciones"
+                ],
+                "summary": "Crear una producción",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Nombre de la produccion",
+                        "required": true
+                    },
+                    {
+                        "name": "genre",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Género de la produccion",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Tipo de producción entre Serie o Pelicula",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Operación exitosa",
+                        "schema": {
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/definitions/Production"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Estatus invalido"
                     }
                 }
             }
         },
-        "/user/{id}": {
-            "get": {
-                "tags": ["User"],
-                "summary": "Find one user",
-                "description": "",
-                "produces": ["application/json"],
-                "parameters": [{
-                    "name": "id",
-                    "in": "path",
-                    "type": "string",
-                    "description": "User Id",
-                    "required": true
-                }],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/User"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid tag value"
-                    }
-                }
-            },
+        "/production/{productionId}": {
             "patch": {
-                "tags": ["User"],
-                "summary": "Update one user",
+                "tags": [
+                    "Producciones"
+                ],
+                "summary": "Editar una producción",
                 "description": "",
-                "produces": ["application/json"],
-                "parameters": [{
-                        "name": "id",
-                        "in": "path",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
                         "type": "string",
-                        "description": "User Id",
+                        "description": "Nombre de la produccion",
                         "required": true
                     },
                     {
-                        "in": "header",
-                        "name": "Authorization",
-                        "description": "Authorization token with admin role",
-                        "required": true,
-                        "type": "string"
+                        "name": "genre",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Género de la produccion",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "in": "body",
+                        "type": "string",
+                        "description": "Tipo de producción entre Serie o Pelicula",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Operación exitosa",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/User"
+                                "$ref": "#/definitions/Production"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid tag value"
+                        "description": "Estatus invalido"
                     }
                 }
             },
             "delete": {
-                "tags": ["User"],
-                "summary": "Delete one user",
+                "tags": [
+                    "Producciones"
+                ],
+                "summary": "Eliminar una producción",
                 "description": "",
-                "produces": ["application/json"],
-                "parameters": [{
-                        "name": "id",
-                        "in": "path",
-                        "type": "string",
-                        "description": "User Id",
-                        "required": true
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "description": "Authorization token with admin role",
-                        "required": true,
-                        "type": "string"
-                    }
+                "produces": [
+                    "application/json"
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
+                        "description": "Operación exitosa",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/User"
+                            "schema": {
+                                "type": "object",
+                                "$ref": "#/definitions/Production"
                             }
                         }
                     },
                     "400": {
-                        "description": "Invalid tag value"
+                        "description": "Estatus invalido"
                     }
                 }
             }
@@ -169,6 +309,55 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Production": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "genre": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "visualizations": {
+                    "type": "number"
+                },
+                "ratingsNumber": {
+                    "type": "number"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "productionOfTheDay": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Rating": {
+            "type": "object",
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "viewed": {
+                    "type": "boolean"
+                },
+                "production": {
                     "type": "string"
                 }
             }
